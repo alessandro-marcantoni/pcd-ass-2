@@ -7,4 +7,6 @@ public interface TrainSolution {
 
     Future<JsonArray> getTrainSolutions(SolutionDetails details);
 
+    Future<JsonArray> getRealTimeTrainInfo(int trainID);
+
 }

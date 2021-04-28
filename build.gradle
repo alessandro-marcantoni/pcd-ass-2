@@ -19,6 +19,9 @@ dependencies {
     /* assignment #01 */
     implementation 'org.apache.pdfbox:pdfbox:2.0.22'
 
+    /* date and time pickers */
+    implementation 'com.github.lgooddatepicker:LGoodDatePicker:11.2.1'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
