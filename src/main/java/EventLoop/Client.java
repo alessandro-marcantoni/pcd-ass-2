@@ -5,7 +5,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 
 public class Client extends AbstractVerticle {
@@ -29,7 +28,10 @@ public class Client extends AbstractVerticle {
                 .addQueryParam("atime", details.getDepartureTime())
                 .send()
                 .onSuccess(res -> {
-                    if(res.statusCode() == 200) promise.complete(res.bodyAsJsonArray());
+                    if (res.statusCode() == 200) {
+                        promise.complete(res.bodyAsJsonArray());
+                        System.out.println(Parsing.getSolutions(res.bodyAsJsonArray()));
+                    }
                 })
                 .onFailure(err -> {
                     promise.fail(err.getMessage());

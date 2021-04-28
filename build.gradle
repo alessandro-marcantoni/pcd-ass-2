@@ -19,6 +19,8 @@ dependencies {
     /* assignment #01 */
     implementation 'org.apache.pdfbox:pdfbox:2.0.22'
 
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
