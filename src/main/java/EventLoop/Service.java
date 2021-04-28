@@ -1,7 +1,5 @@
 package EventLoop;
 
-import io.vertx.core.Vertx;
-
 public class Service {
 
     public static void main(String[] args) {
