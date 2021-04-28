@@ -1,37 +1,40 @@
 package EventLoop;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClient;
 
 public class Client extends AbstractVerticle {
 
     private final WebClient client;
+    private static final String URI = "/msite/api/solutions?arflag=A&adultno=1&childno=0&direction=A&frecce=false&onlyRegional=false";
+    private static final String SERVER = "www.lefrecce.it";
 
     public Client(Vertx vertx) {
         this.client = WebClient.create(vertx);
     }
 
-    public void getTrainSolutions(SolutionDetails details, SolutionsHandler handler) {
+    public Future<JsonArray> getTrainSolutions(SolutionDetails details) {
+        Promise<JsonArray> promise = Promise.promise();
         client
-                .get(443, "www.lefrecce.it", "/msite/api/solutions")
+                .get(443, SERVER, URI)
                 .ssl(true)
                 .addQueryParam("origin", details.getDepartureStation())
                 .addQueryParam("destination", details.getArrivalStation())
-                .addQueryParam("arflag", details.getAR())
                 .addQueryParam("adate", details.getDepartureDate())
                 .addQueryParam("atime", details.getDepartureTime())
-                .addQueryParam("adultno", details.getAdultsNumber())
-                .addQueryParam("childno", details.getChildrenNumber())
-                .addQueryParam("frecce", details.onlyFrecce())
-                .addQueryParam("onlyRegional", details.onlyRegionals())
                 .send()
                 .onSuccess(res -> {
-                    System.out.println(res.bodyAsString());
+                    if(res.statusCode() == 200) promise.complete(res.bodyAsJsonArray());
                 })
                 .onFailure(err -> {
-                    System.out.println(err.getMessage());
+                    promise.fail(err.getMessage());
                 });
+        return promise.future();
     }
 
 }

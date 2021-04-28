@@ -9,14 +9,9 @@ public class Service {
         SolutionDetails details =
                 new SolutionDetails("ROMA TERMINI",
                         "BOLOGNA CENTRALE",
-                        "A",
                         "28/04/2021",
-                        "17",
-                        "1",
-                        "0",
-                        "false",
-                        "false");
-        trainSolution.getTrainSolutions(details, solutions -> {});
+                        "11");
+        trainSolution.getTrainSolutions(details).onSuccess(res -> System.out.println(res));
     }
 
 }

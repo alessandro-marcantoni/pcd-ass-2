@@ -1,7 +1,10 @@
 package EventLoop;
 
 
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
 
 public class TrainSolutionLibrary implements TrainSolution {
 
@@ -15,7 +18,7 @@ public class TrainSolutionLibrary implements TrainSolution {
     }
 
     @Override
-    public void getTrainSolutions(SolutionDetails details, SolutionsHandler handler) {
-        client.getTrainSolutions(details, handler);
+    public Future<JsonArray> getTrainSolutions(SolutionDetails details) {
+        return client.getTrainSolutions(details);
     }
 }
