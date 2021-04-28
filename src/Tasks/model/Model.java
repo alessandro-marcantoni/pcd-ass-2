@@ -1,8 +1,8 @@
-package model;
+package Tasks.model;
 
-import commons.ModelObserver;
-import commons.Pair;
-import commons.WorkerParameter;
+import Tasks.commons.ModelObserver;
+import Tasks.commons.Pair;
+import Tasks.commons.WorkerParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;

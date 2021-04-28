@@ -1,8 +1,8 @@
-package controller.tasks;
+package Tasks.controller.tasks;
 
-import commons.Pair;
-import commons.Parameter;
-import model.monitors.OccurrencesBuffer;
+import Tasks.commons.Pair;
+import Tasks.commons.Parameter;
+import Tasks.model.monitors.OccurrencesBuffer;
 
 import java.util.Arrays;
 import java.util.HashMap;

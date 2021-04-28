@@ -1,4 +1,4 @@
-package controller.tasks;
+package Tasks.controller.tasks;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
@@ -34,12 +34,13 @@ public class StripTask extends RecursiveTask<Void> {
                     .toLowerCase()
                     .replaceAll("\\p{Punct}|\\d", "")
                     .split("\\s+");
+            CountTask task = new CountTask(this.text);
+            System.out.println("BRUH");
+            task.fork();
+            task.join();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CountTask task = new CountTask(text);
-        task.fork();
-        task.join();
         return null;
     }
 

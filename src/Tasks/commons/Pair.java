@@ -1,4 +1,4 @@
-package commons;
+package Tasks.commons;
 
 public class Pair<T,U> {
 

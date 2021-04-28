@@ -1,6 +1,6 @@
-package controller.tasks;
+package Tasks.controller.tasks;
 
-import commons.Parameter;
+import Tasks.commons.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;

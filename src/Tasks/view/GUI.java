@@ -1,4 +1,4 @@
-package view;
+package Tasks.view;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +9,10 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import commons.CommonParameter;
-import commons.ModelObserver;
-import commons.Pair;
-import commons.Parameter;
-import controller.Controller;
+import Tasks.commons.ModelObserver;
+import Tasks.commons.Pair;
+import Tasks.commons.Parameter;
+import Tasks.controller.Controller;
 
 public class GUI implements ModelObserver {
 

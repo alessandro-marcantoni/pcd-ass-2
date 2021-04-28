@@ -1,7 +1,7 @@
-package model.monitors;
+package Tasks.model.monitors;
 
-import commons.Pair;
-import commons.Parameter;
+import Tasks.commons.Pair;
+import Tasks.commons.Parameter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,8 @@ public class OccurrencesBuffer {
 
     private final Map<String, Integer> occurrences = new HashMap<>();
     private int wordsCounted;
+
+    private OccurrencesBuffer() {}
 
     public synchronized void update(final Pair<Map<String,Integer>,Integer> occ) {
         this.wordsCounted += occ.getSecond();
@@ -33,6 +35,11 @@ public class OccurrencesBuffer {
                         .collect(Collectors.toMap(k -> k, this.occurrences::get)),
                 this.wordsCounted
         );
+    }
+
+    public synchronized void clear() {
+        this.occurrences.clear();
+        this.wordsCounted = 0;
     }
 
 }
