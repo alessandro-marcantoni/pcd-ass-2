@@ -35,7 +35,6 @@ public class StripTask extends RecursiveTask<Void> {
                     .replaceAll("\\p{Punct}|\\d", "")
                     .split("\\s+");
             CountTask task = new CountTask(this.text);
-            System.out.println("BRUH");
             task.fork();
             task.join();
         } catch (IOException e) {

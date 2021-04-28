@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+
+    /* module 2.2 - async programming with event-loops - vert.x */
+    implementation 'io.vertx:vertx-core:4.0.3'
+    implementation 'io.vertx:vertx-web:4.0.3'
+    implementation 'io.vertx:vertx-web-client:4.0.3'
+
+    /* module 2.3 - reactive programming - RxJava */
+    implementation "io.reactivex.rxjava3:rxjava:3.0.12"
+
+    /* assignment #01 */
+    implementation 'org.apache.pdfbox:pdfbox:2.0.22'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}

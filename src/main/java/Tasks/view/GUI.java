@@ -9,12 +9,11 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import Tasks.commons.ModelObserver;
 import Tasks.commons.Pair;
 import Tasks.commons.Parameter;
 import Tasks.controller.Controller;
 
-public class GUI implements ModelObserver {
+public class GUI {
 
 	private static final int WIDTH = 1000;
 	private static final int HEIGHT = 500;
@@ -46,7 +45,6 @@ public class GUI implements ModelObserver {
 		this.frame.setVisible(true);
 	}
 
-	@Override
 	public void modelUpdated(final Pair<Map<String,Integer>,Integer> occurrences) {
 		String t = "";
 		for (String word: occurrences.getFirst().keySet().stream().sorted((a, b) -> occurrences.getFirst().get(b) - occurrences.getFirst().get(a)).collect(Collectors.toList())) {
