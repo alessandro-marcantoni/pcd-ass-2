@@ -45,15 +45,4 @@ public class Solution {
         return trains;
     }
 
-    @Override
-    public String toString() {
-        return "Solution{" +
-                "origin='" + origin + '\'' +
-                ", destination='" + destination + '\'' +
-                ", departureTime=" + departureTime +
-                ", arrivalTime=" + arrivalTime +
-                ", duration='" + duration + '\'' +
-                ", trains=" + trains +
-                '}';
-    }
 }

@@ -4,19 +4,20 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 
+import java.util.List;
+
 public class TrainSolutionLibrary implements TrainSolution {
 
-    private final Vertx vertx;
     private final Client client;
 
     public TrainSolutionLibrary() {
-        this.vertx = Vertx.vertx();
+        Vertx vertx = Vertx.vertx();
         this.client = new Client(vertx);
-        this.vertx.deployVerticle(client);
+        vertx.deployVerticle(client);
     }
 
     @Override
-    public Future<JsonArray> getTrainSolutions(SolutionDetails details) {
+    public Future<List<Solution>> getTrainSolutions(SolutionDetails details) {
         return client.getTrainSolutions(details);
     }
 

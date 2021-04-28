@@ -19,12 +19,9 @@ dependencies {
     /* assignment #01 */
     implementation 'org.apache.pdfbox:pdfbox:2.0.22'
 
-<<<<<<< HEAD
     /* date and time pickers */
     implementation 'com.github.lgooddatepicker:LGoodDatePicker:11.2.1'
-=======
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
->>>>>>> c79f8f8a985341652669d7c5bacd70a226f6c65b
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

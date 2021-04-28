@@ -4,8 +4,9 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 import io.vertx.ext.web.client.WebClient;
+
+import java.util.List;
 
 public class Client extends AbstractVerticle {
 
@@ -17,8 +18,8 @@ public class Client extends AbstractVerticle {
         this.client = WebClient.create(vertx);
     }
 
-    public Future<JsonArray> getTrainSolutions(SolutionDetails details) {
-        Promise<JsonArray> promise = Promise.promise();
+    public Future<List<Solution>> getTrainSolutions(SolutionDetails details) {
+        Promise<List<Solution>> promise = Promise.promise();
         client
                 .get(443, SERVER, URI)
                 .ssl(true)
@@ -29,8 +30,7 @@ public class Client extends AbstractVerticle {
                 .send()
                 .onSuccess(res -> {
                     if (res.statusCode() == 200) {
-                        promise.complete(res.bodyAsJsonArray());
-                        System.out.println(Parsing.getSolutions(res.bodyAsJsonArray()));
+                        promise.complete(Parsing.getSolutions(res.bodyAsJsonArray()));
                     }
                 })
                 .onFailure(err -> {
