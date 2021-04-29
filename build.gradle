@@ -22,6 +22,7 @@ dependencies {
     /* date and time pickers */
     implementation 'com.github.lgooddatepicker:LGoodDatePicker:11.2.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

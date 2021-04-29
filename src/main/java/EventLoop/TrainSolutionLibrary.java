@@ -5,6 +5,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 
 import java.util.List;
+import java.util.Map;
 
 public class TrainSolutionLibrary implements TrainSolution {
 
@@ -22,8 +23,8 @@ public class TrainSolutionLibrary implements TrainSolution {
     }
 
     @Override
-    public Future<JsonArray> getRealTimeTrainInfo(int trainID) {
-        return null;
+    public Future<Map<String, String>> getRealTimeTrainInfo(String trainID) {
+        return client.getRealTimeTrainInfo(trainID);
     }
 
     @Override
