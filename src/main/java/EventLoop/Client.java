@@ -8,10 +8,7 @@ import io.vertx.ext.web.client.WebClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Client extends AbstractVerticle {
 
@@ -45,12 +42,17 @@ public class Client extends AbstractVerticle {
     }
 
 
-    public Future<List<Train>> getRealTimeStationInfo(int stationID) {
+    public Future<List<Train>> getRealTimeStationInfo(String stationID) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Promise<List<Train>> promise = Promise.promise();
         client
-                .get(80, "www.viaggiatreno.it", "/viaggiatrenonew/resteasy/viaggiatreno/arrivi/" + stationID + "/" + new Date().toString())
+                .get(80, "www.viaggiatreno.it", "/viaggiatrenonew/resteasy/viaggiatreno/arrivi/" + stationID + "/" + new Date().toString().replaceAll(" ", "%20"))
                 .send()
-                .onSuccess(System.out::println)
+                .onSuccess(res -> {
+                    if (res.statusCode() == 200) {
+                        promise.complete(Parsing.getTrains(res.bodyAsJsonArray()));
+                    }
+                })
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }

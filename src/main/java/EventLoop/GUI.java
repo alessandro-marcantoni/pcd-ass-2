@@ -78,6 +78,7 @@ public class GUI {
             final SolutionDetails details = new SolutionDetails(this.departure.getText(), this.arrival.getText(), this.picker.getDatePicker().getDate().toString(), this.picker.getTimePicker().getTime().toString());
             Future<List<Solution>> future = library.getTrainSolutions(details);
             future.onSuccess(this::fillTable);
+            this.library.getRealTimeStationInfo("S01700");
         });
 
         // DETAILS BOX

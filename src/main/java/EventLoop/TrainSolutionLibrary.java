@@ -28,7 +28,7 @@ public class TrainSolutionLibrary implements TrainSolution {
     }
 
     @Override
-    public Future<List<Train>> getRealTimeStationInfo(int stationID) {
+    public Future<List<Train>> getRealTimeStationInfo(String stationID) {
         return client.getRealTimeStationInfo(stationID);
     }
 }
