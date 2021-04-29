@@ -12,4 +12,6 @@ public interface TrainSolution {
 
     Future<Map<String, String>> getRealTimeTrainInfo(String trainID);
 
+    Future<List<Train>> getRealTimeStationInfo(String stationID);
+
 }

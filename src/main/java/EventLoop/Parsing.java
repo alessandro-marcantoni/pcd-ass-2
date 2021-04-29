@@ -1,5 +1,6 @@
 package EventLoop;
 
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.jsoup.Jsoup;
@@ -57,7 +58,25 @@ public class Parsing {
 
         // delay
         Element info = body.select("div[class=evidenziato]").last().getElementsByTag("strong").get(0);
-        detail.put("info", info.text().trim().replaceAll("<br>", "\n"));
+        detail.put("info", info.text().trim().replace("Ultimo", "\nUltimo"));
         return detail;
     }
+
+    public static List<Train> getTrains(JsonArray array) {
+        return array.stream()
+                .map(Object::toString)
+                .map(JsonObject::new)
+                .map(e -> new Train.Builder(e.getInteger("numeroTreno"), e.getString("categoriaDescrizione").trim())
+                        .origin(e.getString("origine", ""))
+                        .destination(e.getString("destinazione", ""))
+                        .platformArrival(e.getString("binarioEffettivoArrivoDescrizione", ""))
+                        .platformDeparture(e.getString("binarioEffettivoPartenzaDescrizione", ""))
+                        .arrivalTime(new Date(e.getLong("orarioArrivo") != null ? e.getLong("orarioArrivo") : 0))
+                        .departureTime(new Date(e.getLong("orarioPartenza") != null ? e.getLong("orarioPartenza") : 0))
+                        .delay(e.getInteger("ritardo", 0))
+                        .build())
+                .peek(t -> System.out.println(t.toString()))
+                .collect(Collectors.toList());
+    }
+
 }

@@ -9,6 +9,8 @@ import io.vertx.ext.web.client.WebClient;
 import java.util.List;
 import java.util.Map;
 
+import java.util.*;
+
 public class Client extends AbstractVerticle {
 
     private final WebClient client;
@@ -40,6 +42,22 @@ public class Client extends AbstractVerticle {
         return promise.future();
     }
 
+
+    public Future<List<Train>> getRealTimeStationInfo(String stationID) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        Promise<List<Train>> promise = Promise.promise();
+        client
+                .get(80, "www.viaggiatreno.it", "/viaggiatrenonew/resteasy/viaggiatreno/arrivi/" + stationID + "/" + new Date().toString().replaceAll(" ", "%20"))
+                .send()
+                .onSuccess(res -> {
+                    if (res.statusCode() == 200) {
+                        promise.complete(Parsing.getTrains(res.bodyAsJsonArray()));
+                    }
+                })
+                .onFailure(err -> promise.fail(err.getMessage()));
+        return promise.future();
+    }
+
     public Future<Map<String, String>> getRealTimeTrainInfo(String trainID) {
         Promise<Map<String, String>> promise = Promise.promise();
 
@@ -54,7 +72,6 @@ public class Client extends AbstractVerticle {
                 .onFailure(err -> {
                     promise.fail(err.getMessage());
                 });
-
         return promise.future();
     }
 

@@ -2,7 +2,6 @@ package EventLoop;
 
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +26,8 @@ public class TrainSolutionLibrary implements TrainSolution {
         return client.getRealTimeTrainInfo(trainID);
     }
 
+    @Override
+    public Future<List<Train>> getRealTimeStationInfo(String stationID) {
+        return client.getRealTimeStationInfo(stationID);
+    }
 }
