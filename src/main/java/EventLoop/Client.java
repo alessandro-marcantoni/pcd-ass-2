@@ -6,6 +6,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 
+import java.util.Date;
 import java.util.List;
 
 public class Client extends AbstractVerticle {
@@ -36,6 +37,16 @@ public class Client extends AbstractVerticle {
                 .onFailure(err -> {
                     promise.fail(err.getMessage());
                 });
+        return promise.future();
+    }
+
+    public Future<List<Train>> getRealTimeStationInfo(int stationID) {
+        Promise<List<Train>> promise = Promise.promise();
+        client
+                .get(80, "www.viaggiatreno.it", "/viaggiatrenonew/resteasy/viaggiatreno/arrivi/" + stationID + "/" + new Date().toString())
+                .send()
+                .onSuccess(System.out::println)
+                .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }
 

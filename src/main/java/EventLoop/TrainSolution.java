@@ -11,4 +11,6 @@ public interface TrainSolution {
 
     Future<JsonArray> getRealTimeTrainInfo(int trainID);
 
+    Future<List<Train>> getRealTimeStationInfo(int stationID);
+
 }
