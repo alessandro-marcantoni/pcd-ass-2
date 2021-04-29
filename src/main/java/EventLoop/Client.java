@@ -5,8 +5,12 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Client extends AbstractVerticle {
 
@@ -36,6 +40,24 @@ public class Client extends AbstractVerticle {
                 .onFailure(err -> {
                     promise.fail(err.getMessage());
                 });
+        return promise.future();
+    }
+
+    public Future<Map<String, String>> getRealTimeTrainInfo(String trainID) {
+        Promise<Map<String, String>> promise = Promise.promise();
+
+        client
+                .get(443,"www.viaggiatreno.it", "/vt_pax_internet/mobile/scheda")
+                .ssl(true)
+                .addQueryParam("numeroTreno", trainID)
+                .send()
+                .onSuccess(res -> {
+                    promise.complete(Parsing.getDetails(res.bodyAsString(), trainID));
+                })
+                .onFailure(err -> {
+                    promise.fail(err.getMessage());
+                });
+
         return promise.future();
     }
 

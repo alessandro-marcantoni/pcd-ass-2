@@ -5,8 +5,11 @@ import io.vertx.core.Future;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class GUI {
 
@@ -15,6 +18,7 @@ public class GUI {
 
     private final JFrame frame;
     private JTextField departure, arrival;
+    private JTextArea details;
     private DateTimePicker picker;
 
     private final TrainSolution library = new TrainSolutionLibrary();
@@ -23,11 +27,11 @@ public class GUI {
         this.frame = new JFrame("Assignment-2");
 
         this.createInputForm();
-        //this.createResultsTable();
         this.fillTable(new ArrayList<>());
 
         this.frame.setSize(WIDTH, HEIGHT);
         this.frame.setLayout(null);
+        this.frame.setResizable(false);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
     }
@@ -76,6 +80,28 @@ public class GUI {
             future.onSuccess(this::fillTable);
         });
 
+        // DETAILS BOX
+        final JLabel train_details = new JLabel("Train Details:");
+        train_details.setBounds((int) (WIDTH * 0.7), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
+
+        final JTextField train = new JTextField();
+        train.setBounds((int) (WIDTH * 0.78), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+
+        final JButton monitor = new JButton("Go");
+        monitor.setBounds((int) (WIDTH * 0.83), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        final JButton stop = new JButton("X");
+        stop.setBounds((int) (WIDTH * 0.88), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+
+        monitor.addActionListener(e -> {
+            if(!train.getText().isEmpty()) this.fillDetails(train.getText());
+        });
+
+        this.details = new JTextArea();
+        this.details.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        final JScrollPane panel = new JScrollPane(this.details);
+        panel.setBounds((int) (WIDTH * 0.7), (int) (HEIGHT * 0.25), (int) (WIDTH * 0.23), (int) (HEIGHT * 0.6));
+
         this.frame.add(invert);
         this.frame.add(search);
         this.frame.add(departure_label);
@@ -85,48 +111,80 @@ public class GUI {
         this.frame.add(date);
         this.frame.add(time);
         this.frame.add(picker);
+        this.frame.add(train_details);
+        this.frame.add(panel);
+        this.frame.add(train);
+        this.frame.add(monitor);
+        this.frame.add(stop);
     }
 
-    /*private void createResultsTable() {
-        String[] columns = {"DEPARTURE", "ARRIVAL", "DURATION", "TRAIN"};
-        Object[][] data = {};
-
-        table = new JTable(data, columns);
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for(int i = 0; i < columns.length; i++) table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-
-        scroll = new JScrollPane(table);
-        scroll.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.3), (int) (WIDTH * 0.88), (int) (HEIGHT * 0.5));
-
-        this.frame.add(scroll);
-    }*/
+    private String getTime(Date date) {
+        return (date.getHours() < 10 ? "0"+date.getHours() : date.getHours()) +":"+ (date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes());
+    }
 
     private void fillTable(List<Solution> solutions) {
         String[] columns = {"DEPARTURE", "ARRIVAL", "DURATION", "TRAIN"};
         Object[][] data = new Object[solutions.size()][];
         for(int i = 0; i < solutions.size(); i++) {
-            data[i] = new Object[]{solutions.get(i).getOrigin()+ " -> " +
-                                           (solutions.get(i).getDepartureTime().getHours() < 10 ? "0"+solutions.get(i).getDepartureTime().getHours() : solutions.get(i).getDepartureTime().getHours())
-                                           +":"+
-                                           (solutions.get(i).getDepartureTime().getMinutes() < 10 ? "0"+solutions.get(i).getDepartureTime().getMinutes() : solutions.get(i).getDepartureTime().getMinutes()),
-                                   solutions.get(i).getDestination() + " -> " +
-                                           (solutions.get(i).getArrivalTime().getHours() < 10 ? "0"+solutions.get(i).getArrivalTime().getHours() : solutions.get(i).getArrivalTime().getHours())
-                                           +":"+
-                                           (solutions.get(i).getDepartureTime().getMinutes() < 10 ? "0"+solutions.get(i).getDepartureTime().getMinutes() : solutions.get(i).getDepartureTime().getMinutes()),
+            //final JButton btn = new JButton("Train Detail");
+            data[i] = new Object[]{solutions.get(i).getOrigin()+ " >> " + getTime(solutions.get(i).getDepartureTime()),
+                                   solutions.get(i).getDestination() + " >> " + getTime(solutions.get(i).getArrivalTime()),
                                    solutions.get(i).getDuration(),
-                                   solutions.get(i).getTrains()
-                                   };
+                                   solutions.get(i).getTrains()};
         }
+
         JTable table = new JTable(data, columns);
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        /*TableCellRenderer buttonRenderer = (table1, value, isSelected, hasFocus, row, column) -> (JButton)value;
+        table.getColumn(" ").setCellRenderer(buttonRenderer);*/
+
         for(int i = 0; i < columns.length; i++) table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        table.setRowHeight(40);
 
         JScrollPane scroll = new JScrollPane(table);
-        scroll.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.3), (int) (WIDTH * 0.88), (int) (HEIGHT * 0.5));
+        scroll.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.25), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.45));
 
         this.frame.add(scroll);
+    }
+
+    private void fillDetails(String train) {
+        Future<Map<String, String>> future = library.getRealTimeTrainInfo(train);
+        future.onSuccess(map -> this.details.setText(
+                "----------------------------------------\n" +
+                "Departure Station: \n" +
+                map.get("dep_station") + "\n\n" +
+                "Programmed Departure: \n" +
+                map.get("dep_prog") + "\n\n" +
+                "Effective Departure: \n" +
+                map.get("dep_eff") + "\n\n" +
+                checkTrainArrived(map) +
+                "----------------------------------------\n" +
+                "Arrival Station: \n" +
+                map.get("arr_station") + "\n\n" +
+                "Programmed Arrival: \n" +
+                map.get("arr_prog") + "\n\n" +
+                "Effective Arrival: \n" +
+                map.get("arr_eff") + "\n\n" +
+                "----------------------------------------\n" +
+                map.get("info"))
+        );
+    }
+
+    private String checkTrainArrived(Map<String, String> map) {
+        if(Integer.parseInt(map.get("size")) < 3) {
+            return "";
+        } else {
+            return "----------------------------------------\n" +
+                    "Last Seen Station: \n" +
+                    map.get("last_station") + "\n\n" +
+                    "Programmed Arrival: \n" +
+                    map.get("last_prog") + "\n\n" +
+                    "Effective Arrival: \n" +
+                    map.get("last_eff") + "\n\n";
+        }
     }
 
 }
