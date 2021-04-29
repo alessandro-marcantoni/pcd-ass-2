@@ -35,7 +35,6 @@ public class Parsing {
 
     public static Map<String, String> getDetails(String html, String trainID) {
         final Map<String, String> detail = new HashMap<>();
-        //detail.put("trainID", trainID);
         Document doc = Jsoup.parse(html);
         Element body = doc.body();
 
@@ -57,8 +56,8 @@ public class Parsing {
         detail.put("arr_eff", stations.last().getElementsByTag("p").get(1).getElementsByTag("strong").text().trim());
 
         // delay
-        Element info = body.select("div[class=evidenziato]").last();
-        detail.put("info", info.text().trim());
+        Element info = body.select("div[class=evidenziato]").last().getElementsByTag("strong").get(0);
+        detail.put("info", info.text().trim().replaceAll("<br>", "\n"));
         return detail;
     }
 }

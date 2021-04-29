@@ -23,6 +23,8 @@ public class GUI {
 
     private final TrainSolution library = new TrainSolutionLibrary();
 
+    private boolean running = false;
+
     public GUI() {
         this.frame = new JFrame("Assignment-2");
 
@@ -93,8 +95,14 @@ public class GUI {
         stop.setBounds((int) (WIDTH * 0.88), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         monitor.addActionListener(e -> {
-            if(!train.getText().isEmpty()) this.fillDetails(train.getText());
+            if(!train.getText().isEmpty()) {
+                this.running = true;
+                this.fillDetails(train.getText());
+
+            }
         });
+
+        stop.addActionListener(e -> this.running = false);
 
         this.details = new JTextArea();
         this.details.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -126,7 +134,6 @@ public class GUI {
         String[] columns = {"DEPARTURE", "ARRIVAL", "DURATION", "TRAIN"};
         Object[][] data = new Object[solutions.size()][];
         for(int i = 0; i < solutions.size(); i++) {
-            //final JButton btn = new JButton("Train Detail");
             data[i] = new Object[]{solutions.get(i).getOrigin()+ " >> " + getTime(solutions.get(i).getDepartureTime()),
                                    solutions.get(i).getDestination() + " >> " + getTime(solutions.get(i).getArrivalTime()),
                                    solutions.get(i).getDuration(),
@@ -138,11 +145,9 @@ public class GUI {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-        /*TableCellRenderer buttonRenderer = (table1, value, isSelected, hasFocus, row, column) -> (JButton)value;
-        table.getColumn(" ").setCellRenderer(buttonRenderer);*/
-
         for(int i = 0; i < columns.length; i++) table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         table.setRowHeight(40);
+        table.getColumn("DURATION").setPreferredWidth(5);
 
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.25), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.45));
@@ -153,7 +158,7 @@ public class GUI {
     private void fillDetails(String train) {
         Future<Map<String, String>> future = library.getRealTimeTrainInfo(train);
         future.onSuccess(map -> this.details.setText(
-                "----------------------------------------\n" +
+                "-----------------------------------------------------\n" +
                 "Departure Station: \n" +
                 map.get("dep_station") + "\n\n" +
                 "Programmed Departure: \n" +
@@ -161,14 +166,14 @@ public class GUI {
                 "Effective Departure: \n" +
                 map.get("dep_eff") + "\n\n" +
                 checkTrainArrived(map) +
-                "----------------------------------------\n" +
+                "-----------------------------------------------------\n" +
                 "Arrival Station: \n" +
                 map.get("arr_station") + "\n\n" +
                 "Programmed Arrival: \n" +
                 map.get("arr_prog") + "\n\n" +
                 "Effective Arrival: \n" +
                 map.get("arr_eff") + "\n\n" +
-                "----------------------------------------\n" +
+                "-----------------------------------------------------\n" +
                 map.get("info"))
         );
     }
@@ -177,7 +182,7 @@ public class GUI {
         if(Integer.parseInt(map.get("size")) < 3) {
             return "";
         } else {
-            return "----------------------------------------\n" +
+            return "-----------------------------------------------------\n" +
                     "Last Seen Station: \n" +
                     map.get("last_station") + "\n\n" +
                     "Programmed Arrival: \n" +
