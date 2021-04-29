@@ -70,7 +70,7 @@ public class Parsing {
                 .map(e -> new Train.Builder(e.getInteger("numeroTreno"), e.getString("categoriaDescrizione").trim())
                         .origin(e.getString("origine", ""))
                         .destination(e.getString("destinazione", ""))
-                        .platformDeparture(e.getString("binarioEffettivoArrivoDescrizione", ""))
+                        .platformArrival(e.getString("binarioEffettivoArrivoDescrizione", ""))
                         .platformDeparture(e.getString("binarioEffettivoPartenzaDescrizione", ""))
                         .arrivalTime(new Date(e.getLong("orarioArrivo") != null ? e.getLong("orarioArrivo") : 0))
                         .departureTime(new Date(e.getLong("orarioPartenza") != null ? e.getLong("orarioPartenza") : 0))
