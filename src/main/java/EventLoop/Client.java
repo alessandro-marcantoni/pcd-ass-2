@@ -13,8 +13,6 @@ import java.util.*;
 public class Client extends AbstractVerticle {
 
     private final WebClient client;
-    private static final String URI = "/msite/api/solutions?arflag=A&adultno=1&childno=0&direction=A&frecce=false&onlyRegional=false";
-    private static final String SERVER = "www.lefrecce.it";
 
     public Client(Vertx vertx) {
         this.client = WebClient.create(vertx);
@@ -23,7 +21,7 @@ public class Client extends AbstractVerticle {
     public Future<List<Solution>> getTrainSolutions(Parameters parameters) {
         Promise<List<Solution>> promise = Promise.promise();
         client
-                .get(443, SERVER, URI)
+                .get(443, "www.lefrecce.it", "/msite/api/solutions?arflag=A&adultno=1&childno=0&direction=A&frecce=false&onlyRegional=false")
                 .ssl(true)
                 .addQueryParam("origin", parameters.getDepartureStation())
                 .addQueryParam("destination", parameters.getArrivalStation())
@@ -63,7 +61,11 @@ public class Client extends AbstractVerticle {
                 .ssl(true)
                 .addQueryParam("numeroTreno", trainID)
                 .send()
-                .onSuccess(res -> promise.complete(Parsing.getDetails(res.bodyAsString())))
+                .onSuccess(res -> {
+                    if (res.statusCode() == 200) {
+                        promise.complete(Parsing.getDetails(res.bodyAsString()));
+                    }
+                })
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }

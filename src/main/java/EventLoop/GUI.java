@@ -20,9 +20,12 @@ public class GUI {
     private JTextArea details, station;
     private DateTimePicker picker;
 
-    private final TrainSolution library = new TrainSolutionLibrary();
+    private JTextField train_field, station_field;
 
-    private boolean running = false;
+    private boolean train_running = false;
+    private boolean station_running = false;
+
+    private final TrainSolution library = new TrainSolutionLibrary();
 
     public GUI() {
         this.frame = new JFrame("Assignment-2");
@@ -35,6 +38,30 @@ public class GUI {
         this.frame.setResizable(false);
         this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.frame.setVisible(true);
+    }
+
+    public String getTrainCode() {
+        return this.train_field.getText();
+    }
+
+    public JTextArea getTrainArea() {
+        return this.details;
+    }
+
+    public synchronized boolean isTrainRunning() {
+        return this.train_running;
+    }
+
+    public String getStationCode() {
+        return this.station_field.getText();
+    }
+
+    public JTextArea getStationArea() {
+        return this.station;
+    }
+
+    public synchronized boolean isStationRunning() {
+        return this.station_running;
     }
 
     private void createGUI() {
@@ -83,59 +110,68 @@ public class GUI {
         });
 
         // DETAILS BOX
-        final JLabel train_details = new JLabel("Dettagli Treno");
-        train_details.setBounds((int) (WIDTH * 0.7), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
+        final JLabel train_details = new JLabel("Dettagli Treno:");
+        train_details.setBounds((int) (WIDTH * 0.66), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
 
-        final JTextField train_field = new JTextField();
-        train_field.setBounds((int) (WIDTH * 0.78), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        this.train_field = new JTextField();
+        this.train_field.setBounds((int) (WIDTH * 0.76), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         this.details = new JTextArea();
         this.details.setEditable(false);
         this.details.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         final JScrollPane train_panel = new JScrollPane(this.details);
-        train_panel.setBounds((int) (WIDTH * 0.7), (int) (HEIGHT * 0.25), (int) (WIDTH * 0.23), (int) (HEIGHT * 0.6));
+        train_panel.setBounds((int) (WIDTH * 0.66), (int) (HEIGHT * 0.22), (int) (WIDTH * 0.27), (int) (HEIGHT * 0.65));
 
         final JButton monitor_train = new JButton(">");
-        monitor_train.setBounds((int) (WIDTH * 0.83), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        monitor_train.setBounds((int) (WIDTH * 0.83), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
         final JButton stop_train = new JButton("X");
-        stop_train.setBounds((int) (WIDTH * 0.88), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        stop_train.setBounds((int) (WIDTH * 0.88), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         monitor_train.addActionListener(e -> {
-            if(!train_field.getText().isEmpty()) {
-                this.running = true;
-                this.fillTrainDetails(train_field.getText());
+            if(!this.train_field.getText().isEmpty()) {
+                //this.fillTrainDetails(train_field.getText());
+                this.train_running = true;
+                new Thread(new TrainMonitor(this.library, this)).start();
             }
         });
 
-        stop_train.addActionListener(e -> this.running = false);
+        stop_train.addActionListener(e -> {
+            //monitorTrain.stop();
+            this.details.setText("");
+            this.train_running = false;
+        });
 
         // STATION BOX
-        final JLabel station_details = new JLabel("Dettagli Stazione");
-        station_details.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.7), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
+        final JLabel station_details = new JLabel("Dettagli Stazione:");
+        station_details.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
 
-        final JTextField station_field = new JTextField();
-        station_field.setBounds((int) (WIDTH * 0.146), (int) (HEIGHT * 0.7), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        this.station_field = new JTextField();
+        this.station_field.setBounds((int) (WIDTH * 0.17), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         this.station = new JTextArea();
         this.station.setEditable(false);
         this.station.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         final JScrollPane station_panel = new JScrollPane(this.station);
-        station_panel.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.75), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.1));
+        station_panel.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.71), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.16));
 
         final JButton monitor_station = new JButton(">");
-        monitor_station.setBounds((int) (WIDTH * 0.196), (int) (HEIGHT * 0.7), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        monitor_station.setBounds((int) (WIDTH * 0.25), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
         final JButton stop_station = new JButton("X");
-        stop_station.setBounds((int) (WIDTH * 0.246), (int) (HEIGHT * 0.7), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        stop_station.setBounds((int) (WIDTH * 0.3), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         monitor_station.addActionListener(e -> {
-            if(!station_field.getText().isEmpty()) {
-                this.station.setText("wow");
+            if(!this.station_field.getText().isEmpty()) {
+                this.station_running = true;
+                new Thread(new StationMonitor(this.library, this)).start();
             }
         });
 
-        stop_station.addActionListener(e -> {});
+        stop_station.addActionListener(e -> {
+            this.station.setText("");
+            this.station_running = false;
+        });
 
         this.frame.add(invert);
         this.frame.add(search);
@@ -145,17 +181,17 @@ public class GUI {
         this.frame.add(this.arrival);
         this.frame.add(date);
         this.frame.add(time);
-        this.frame.add(picker);
+        this.frame.add(this.picker);
 
         this.frame.add(train_details);
         this.frame.add(train_panel);
-        this.frame.add(train_field);
+        this.frame.add(this.train_field);
         this.frame.add(monitor_train);
         this.frame.add(stop_train);
 
         this.frame.add(station_details);
         this.frame.add(station_panel);
-        this.frame.add(station_field);
+        this.frame.add(this.station_field);
         this.frame.add(monitor_station);
         this.frame.add(stop_station);
     }
@@ -168,10 +204,12 @@ public class GUI {
         String[] columns = {"PARTENZA", "ARRIVO", "DURATA", "TRENO"};
         Object[][] data = new Object[solutions.size()][];
         for(int i = 0; i < solutions.size(); i++) {
-            data[i] = new Object[]{solutions.get(i).getOrigin()+ " >> " + getTime(solutions.get(i).getDepartureTime()),
-                                   solutions.get(i).getDestination() + " >> " + getTime(solutions.get(i).getArrivalTime()),
-                                   solutions.get(i).getDuration(),
-                                   solutions.get(i).getTrains()};
+            data[i] = new Object[]{
+                    solutions.get(i).getOrigin()+ " >> " + getTime(solutions.get(i).getDepartureTime()),
+                    solutions.get(i).getDestination() + " >> " + getTime(solutions.get(i).getArrivalTime()),
+                    solutions.get(i).getDuration(),
+                    solutions.get(i).getTrains()
+            };
         }
 
         JTable table = new JTable(data, columns);
@@ -185,12 +223,12 @@ public class GUI {
 
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        scroll.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.25), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.45));
+        scroll.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.2), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.45));
 
         this.frame.add(scroll);
     }
 
-    private void fillTrainDetails(String train) {
+    /*private void fillTrainDetails(String train) {
         Future<Details> future = library.getRealTimeTrainInfo(train);
         future.onSuccess(detail ->
             this.details.setText(
@@ -226,6 +264,6 @@ public class GUI {
                     "Arrivo Effettivo: \n" +
                     detail.getEffectiveLast() + "\n\n";
         }
-    }
+    }*/
 
 }
