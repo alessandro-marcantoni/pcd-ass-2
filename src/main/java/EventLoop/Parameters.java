@@ -1,13 +1,13 @@
 package EventLoop;
 
-public class SolutionDetails {
+public class Parameters {
 
     private final String departureStation;
     private final String arrivalStation;
     private final String departureDate;
     private final String departureTime;
 
-    public SolutionDetails(String departureStation, String arrivalStation, String departureDate, String departureTime) {
+    public Parameters(String departureStation, String arrivalStation, String departureDate, String departureTime) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.departureDate = departureDate;

@@ -84,4 +84,39 @@ public class Train {
         this.delay = builder.delay;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getPlatformArrival() {
+        return platformArrival;
+    }
+
+    public String getPlatformDeparture() {
+        return platformDeparture;
+    }
+
+    public Date getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public Date getDepartureTime() {
+        return departureTime;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
 }

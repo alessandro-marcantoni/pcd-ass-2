@@ -1,16 +1,14 @@
 package EventLoop;
 
 import io.vertx.core.Future;
-import io.vertx.core.json.JsonArray;
 
 import java.util.List;
-import java.util.Map;
 
 public interface TrainSolution {
 
-    Future<List<Solution>> getTrainSolutions(SolutionDetails details);
+    Future<List<Solution>> getTrainSolutions(Parameters details);
 
-    Future<Map<String, String>> getRealTimeTrainInfo(String trainID);
+    Future<Details> getRealTimeTrainInfo(String trainID);
 
     Future<List<Train>> getRealTimeStationInfo(String stationID);
 

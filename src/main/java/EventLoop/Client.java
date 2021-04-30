@@ -7,7 +7,6 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 
 import java.util.List;
-import java.util.Map;
 
 import java.util.*;
 
@@ -21,15 +20,15 @@ public class Client extends AbstractVerticle {
         this.client = WebClient.create(vertx);
     }
 
-    public Future<List<Solution>> getTrainSolutions(SolutionDetails details) {
+    public Future<List<Solution>> getTrainSolutions(Parameters parameters) {
         Promise<List<Solution>> promise = Promise.promise();
         client
                 .get(443, SERVER, URI)
                 .ssl(true)
-                .addQueryParam("origin", details.getDepartureStation())
-                .addQueryParam("destination", details.getArrivalStation())
-                .addQueryParam("adate", details.getDepartureDate())
-                .addQueryParam("atime", details.getDepartureTime())
+                .addQueryParam("origin", parameters.getDepartureStation())
+                .addQueryParam("destination", parameters.getArrivalStation())
+                .addQueryParam("adate", parameters.getDepartureDate())
+                .addQueryParam("atime", parameters.getDepartureTime())
                 .send()
                 .onSuccess(res -> {
                     if (res.statusCode() == 200) {
@@ -58,8 +57,8 @@ public class Client extends AbstractVerticle {
         return promise.future();
     }
 
-    public Future<Map<String, String>> getRealTimeTrainInfo(String trainID) {
-        Promise<Map<String, String>> promise = Promise.promise();
+    public Future<Details> getRealTimeTrainInfo(String trainID) {
+        Promise<Details> promise = Promise.promise();
 
         client
                 .get(443,"www.viaggiatreno.it", "/vt_pax_internet/mobile/scheda")
@@ -67,7 +66,7 @@ public class Client extends AbstractVerticle {
                 .addQueryParam("numeroTreno", trainID)
                 .send()
                 .onSuccess(res -> {
-                    promise.complete(Parsing.getDetails(res.bodyAsString(), trainID));
+                    promise.complete(Parsing.getDetails(res.bodyAsString()));
                 })
                 .onFailure(err -> {
                     promise.fail(err.getMessage());

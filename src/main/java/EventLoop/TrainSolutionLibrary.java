@@ -4,7 +4,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
 import java.util.List;
-import java.util.Map;
 
 public class TrainSolutionLibrary implements TrainSolution {
 
@@ -17,12 +16,12 @@ public class TrainSolutionLibrary implements TrainSolution {
     }
 
     @Override
-    public Future<List<Solution>> getTrainSolutions(SolutionDetails details) {
+    public Future<List<Solution>> getTrainSolutions(Parameters details) {
         return client.getTrainSolutions(details);
     }
 
     @Override
-    public Future<Map<String, String>> getRealTimeTrainInfo(String trainID) {
+    public Future<Details> getRealTimeTrainInfo(String trainID) {
         return client.getRealTimeTrainInfo(trainID);
     }
 

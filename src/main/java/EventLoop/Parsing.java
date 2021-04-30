@@ -34,32 +34,27 @@ public class Parsing {
                 .collect(Collectors.toList());
     }
 
-    public static Map<String, String> getDetails(String html, String trainID) {
-        final Map<String, String> detail = new HashMap<>();
+    public static Details getDetails(String html) {
         Document doc = Jsoup.parse(html);
         Element body = doc.body();
 
-        // stations
         Elements stations = body.select("div[class=corpocentrale]");
-        detail.put("size", String.valueOf(stations.size()));
-        detail.put("dep_station", stations.get(0).getElementsByTag("h2").text());
-        if(stations.size() > 2) detail.put("last_station", stations.get(1).getElementsByTag("h2").text()); // train not arrived yet
-        detail.put("arr_station", stations.last().getElementsByTag("h2").text());
+        final boolean arrived = stations.size() < 3; // 2 stations means that the train is arrived or not departed yet
 
-        // times
-        detail.put("dep_prog", stations.get(0).getElementsByTag("p").get(0).getElementsByTag("strong").text().trim());
-        detail.put("dep_eff", stations.get(0).getElementsByTag("p").get(1).getElementsByTag("strong").text().trim());
-        if(stations.size() > 2) {
-            detail.put("last_prog", stations.get(0).getElementsByTag("p").get(0).getElementsByTag("strong").text().trim());
-            detail.put("last_eff", stations.get(0).getElementsByTag("p").get(1).getElementsByTag("strong").text().trim());
-        }
-        detail.put("arr_prog", stations.last().getElementsByTag("p").get(0).getElementsByTag("strong").text().trim());
-        detail.put("arr_eff", stations.last().getElementsByTag("p").get(1).getElementsByTag("strong").text().trim());
-
-        // delay
         Element info = body.select("div[class=evidenziato]").last().getElementsByTag("strong").get(0);
-        detail.put("info", info.text().trim().replace("Ultimo", "\nUltimo"));
-        return detail;
+
+        return new Details.Builder(stations.size())
+                .departureStation(stations.get(0).getElementsByTag("h2").text())
+                .lastStation(!arrived ? stations.get(1).getElementsByTag("h2").text() : "")
+                .arrivalStation(stations.last().getElementsByTag("h2").text())
+                .programmedDeparture(stations.get(0).getElementsByTag("p").get(0).getElementsByTag("strong").text().trim())
+                .effectiveDeparture(stations.get(0).getElementsByTag("p").get(1).getElementsByTag("strong").text().trim())
+                .programmedLast(!arrived ? stations.get(1).getElementsByTag("p").get(0).getElementsByTag("strong").text().trim() : "")
+                .effectiveLast(!arrived ? stations.get(1).getElementsByTag("p").get(1).getElementsByTag("strong").text().trim() : "")
+                .programmedArrival(stations.last().getElementsByTag("p").get(0).getElementsByTag("strong").text().trim())
+                .effectiveArrival(stations.last().getElementsByTag("p").get(1).getElementsByTag("strong").text().trim())
+                .information(info.text().trim().replace("Ultimo", "\nUltimo"))
+                .build();
     }
 
     public static List<Train> getTrains(JsonArray array) {
@@ -75,7 +70,6 @@ public class Parsing {
                         .departureTime(new Date(e.getLong("orarioPartenza") != null ? e.getLong("orarioPartenza") : 0))
                         .delay(e.getInteger("ritardo", 0))
                         .build())
-                .peek(t -> System.out.println(t.toString()))
                 .collect(Collectors.toList());
     }
 

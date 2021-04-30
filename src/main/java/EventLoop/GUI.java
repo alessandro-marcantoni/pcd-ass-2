@@ -9,7 +9,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class GUI {
 
@@ -77,8 +76,8 @@ public class GUI {
         search.setBounds((int) (WIDTH * 0.85), (int) (HEIGHT * 0.1), (int) (WIDTH * 0.08), (int) (HEIGHT * 0.06));
 
         search.addActionListener(e -> {
-            final SolutionDetails details = new SolutionDetails(this.departure.getText(), this.arrival.getText(), this.picker.getDatePicker().getDate().toString(), this.picker.getTimePicker().getTime().toString());
-            Future<List<Solution>> future = library.getTrainSolutions(details);
+            final Parameters parameters = new Parameters(this.departure.getText(), this.arrival.getText(), this.picker.getDatePicker().getDate().toString(), this.picker.getTimePicker().getTime().toString());
+            Future<List<Solution>> future = library.getTrainSolutions(parameters);
             future.onSuccess(this::fillTable);
             //this.library.getRealTimeStationInfo("S01700");
         });
@@ -105,8 +104,7 @@ public class GUI {
         monitor_train.addActionListener(e -> {
             if(!train_field.getText().isEmpty()) {
                 this.running = true;
-                this.fillDetails(train_field.getText());
-
+                this.fillTrainDetails(train_field.getText());
             }
         });
 
@@ -192,40 +190,42 @@ public class GUI {
         this.frame.add(scroll);
     }
 
-    private void fillDetails(String train) {
-        Future<Map<String, String>> future = library.getRealTimeTrainInfo(train);
-        future.onSuccess(map -> this.details.setText(
+    private void fillTrainDetails(String train) {
+        Future<Details> future = library.getRealTimeTrainInfo(train);
+        future.onSuccess(detail -> {
+            this.details.setText(
                 "-----------------------------------------------------\n" +
                 "Stazione di Partenza: \n" +
-                map.get("dep_station") + "\n\n" +
+                detail.getDepartureStation() + "\n\n" +
                 "Partenza Programmata: \n" +
-                map.get("dep_prog") + "\n\n" +
+                detail.getProgrammedDeparture() + "\n\n" +
                 "Partenza Effettiva: \n" +
-                map.get("dep_eff") + "\n\n" +
-                checkTrainArrived(map) +
+                detail.getEffectiveDeparture() + "\n\n" +
+                checkTrainArrived(detail) +
                 "-----------------------------------------------------\n" +
                 "Stazione di Arrivo: \n" +
-                map.get("arr_station") + "\n\n" +
+                detail.getArrivalStation() + "\n\n" +
                 "Arrivo Programmato: \n" +
-                map.get("arr_prog") + "\n\n" +
+                detail.getProgrammedArrival() + "\n\n" +
                 "Arrivo Effettivo: \n" +
-                map.get("arr_eff") + "\n\n" +
+                detail.getEffectiveArrival() + "\n\n" +
                 "-----------------------------------------------------\n" +
-                map.get("info"))
-        );
+                detail.getInformation()
+            );
+        });
     }
 
-    private String checkTrainArrived(Map<String, String> map) {
-        if(Integer.parseInt(map.get("size")) < 3) {
+    private String checkTrainArrived(Details detail) {
+        if(detail .getSize() < 3) { // train arrived
             return "";
         } else {
             return "-----------------------------------------------------\n" +
                     "Ultima Fermata Effettuata: \n" +
-                    map.get("last_station") + "\n\n" +
+                    detail.getLastStation() + "\n\n" +
                     "Arrivo Programmato: \n" +
-                    map.get("last_prog") + "\n\n" +
+                    detail.getProgrammedLast() + "\n\n" +
                     "Arrivo Effettivo: \n" +
-                    map.get("last_eff") + "\n\n";
+                    detail.getEffectiveLast() + "\n\n";
         }
     }
 
