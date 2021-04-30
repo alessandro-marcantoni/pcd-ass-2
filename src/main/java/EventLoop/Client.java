@@ -35,9 +35,7 @@ public class Client extends AbstractVerticle {
                         promise.complete(Parsing.getSolutions(res.bodyAsJsonArray()));
                     }
                 })
-                .onFailure(err -> {
-                    promise.fail(err.getMessage());
-                });
+                .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }
 
@@ -65,12 +63,8 @@ public class Client extends AbstractVerticle {
                 .ssl(true)
                 .addQueryParam("numeroTreno", trainID)
                 .send()
-                .onSuccess(res -> {
-                    promise.complete(Parsing.getDetails(res.bodyAsString()));
-                })
-                .onFailure(err -> {
-                    promise.fail(err.getMessage());
-                });
+                .onSuccess(res -> promise.complete(Parsing.getDetails(res.bodyAsString())))
+                .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }
 

@@ -192,27 +192,26 @@ public class GUI {
 
     private void fillTrainDetails(String train) {
         Future<Details> future = library.getRealTimeTrainInfo(train);
-        future.onSuccess(detail -> {
+        future.onSuccess(detail ->
             this.details.setText(
-                "-----------------------------------------------------\n" +
-                "Stazione di Partenza: \n" +
-                detail.getDepartureStation() + "\n\n" +
-                "Partenza Programmata: \n" +
-                detail.getProgrammedDeparture() + "\n\n" +
-                "Partenza Effettiva: \n" +
-                detail.getEffectiveDeparture() + "\n\n" +
-                checkTrainArrived(detail) +
-                "-----------------------------------------------------\n" +
-                "Stazione di Arrivo: \n" +
-                detail.getArrivalStation() + "\n\n" +
-                "Arrivo Programmato: \n" +
-                detail.getProgrammedArrival() + "\n\n" +
-                "Arrivo Effettivo: \n" +
-                detail.getEffectiveArrival() + "\n\n" +
-                "-----------------------------------------------------\n" +
-                detail.getInformation()
-            );
-        });
+            "-----------------------------------------------------\n" +
+            "Stazione di Partenza: \n" +
+            detail.getDepartureStation() + "\n\n" +
+            "Partenza Programmata: \n" +
+            detail.getProgrammedDeparture() + "\n\n" +
+            "Partenza Effettiva: \n" +
+            detail.getEffectiveDeparture() + "\n\n" +
+            checkTrainArrived(detail) +
+            "-----------------------------------------------------\n" +
+            "Stazione di Arrivo: \n" +
+            detail.getArrivalStation() + "\n\n" +
+            "Arrivo Programmato: \n" +
+            detail.getProgrammedArrival() + "\n\n" +
+            "Arrivo Effettivo: \n" +
+            detail.getEffectiveArrival() + "\n\n" +
+            "-----------------------------------------------------\n" +
+            detail.getInformation())
+        );
     }
 
     private String checkTrainArrived(Details detail) {

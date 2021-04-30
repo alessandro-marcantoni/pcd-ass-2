@@ -93,7 +93,7 @@ public class Details {
     }
 
     private Details(Builder builder) {
-        this.size = builder.size;;
+        this.size = builder.size;
         this.departureStation = builder.departureStation;
         this.lastStation = builder.lastStation;
         this.arrivalStation = builder.arrivalStation;
