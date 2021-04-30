@@ -205,7 +205,10 @@ public class GUI {
                     solutions.get(i).getOrigin()+ " >> " + getTime(solutions.get(i).getDepartureTime()),
                     solutions.get(i).getDestination() + " >> " + getTime(solutions.get(i).getArrivalTime()),
                     solutions.get(i).getDuration(),
-                    solutions.get(i).getTrains()
+                    solutions.get(i).getTrains().toString()
+                            .replaceAll("\\[", "")
+                            .replaceAll("\\]", "")
+                            .replaceAll(",", " -")
             };
         }
 

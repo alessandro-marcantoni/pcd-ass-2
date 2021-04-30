@@ -25,7 +25,7 @@ public class StationMonitor implements Runnable {
             future.onSuccess(trains -> {
                 gui.getStationArea().setText(trains.stream()
                     .map(t ->
-                        "\nNumero: " + t.getNumber() + "\n" +
+                        "Numero: " + t.getNumber() + "\n" +
                         "Tipo: " + t.getCategory() + "\n" +
                         "Stazione di Origine: " + t.getOrigin() + "\n" +
                         "Stazione di Destinazione: " + t.getDestination() + "\n" +
@@ -34,7 +34,10 @@ public class StationMonitor implements Runnable {
                         "Binario di Partenza: " + t.getPlatformDeparture() + "\n" +
                         "Orario di Partenza: " + getTime(t.getDepartureTime()) + "\n" +
                         "Ritardo: " + t.getDelay() + " minuti\n\n")
-                .collect(Collectors.toList()).toString());
+                .collect(Collectors.toList()).toString()
+                        .replaceAll("\\[", "")
+                        .replaceAll("\\]", "")
+                        .replaceAll(",", ""));
             });
             try {
                 Thread.sleep(FREQUENCY);
