@@ -106,7 +106,6 @@ public class GUI {
             final Parameters parameters = new Parameters(this.departure.getText(), this.arrival.getText(), this.picker.getDatePicker().getDate().toString(), this.picker.getTimePicker().getTime().toString());
             Future<List<Solution>> future = library.getTrainSolutions(parameters);
             future.onSuccess(this::fillTable);
-            //this.library.getRealTimeStationInfo("S01700");
         });
 
         // DETAILS BOX
@@ -130,16 +129,14 @@ public class GUI {
 
         monitor_train.addActionListener(e -> {
             if(!this.train_field.getText().isEmpty()) {
-                //this.fillTrainDetails(train_field.getText());
                 this.train_running = true;
                 new Thread(new TrainMonitor(this.library, this)).start();
             }
         });
 
         stop_train.addActionListener(e -> {
-            //monitorTrain.stop();
-            this.details.setText("");
             this.train_running = false;
+            this.details.setText("");
         });
 
         // STATION BOX
@@ -169,8 +166,8 @@ public class GUI {
         });
 
         stop_station.addActionListener(e -> {
-            this.station.setText("");
             this.station_running = false;
+            this.station.setText("");
         });
 
         this.frame.add(invert);
@@ -227,43 +224,5 @@ public class GUI {
 
         this.frame.add(scroll);
     }
-
-    /*private void fillTrainDetails(String train) {
-        Future<Details> future = library.getRealTimeTrainInfo(train);
-        future.onSuccess(detail ->
-            this.details.setText(
-            "-----------------------------------------------------\n" +
-            "Stazione di Partenza: \n" +
-            detail.getDepartureStation() + "\n\n" +
-            "Partenza Programmata: \n" +
-            detail.getProgrammedDeparture() + "\n\n" +
-            "Partenza Effettiva: \n" +
-            detail.getEffectiveDeparture() + "\n\n" +
-            checkTrainArrived(detail) +
-            "-----------------------------------------------------\n" +
-            "Stazione di Arrivo: \n" +
-            detail.getArrivalStation() + "\n\n" +
-            "Arrivo Programmato: \n" +
-            detail.getProgrammedArrival() + "\n\n" +
-            "Arrivo Effettivo: \n" +
-            detail.getEffectiveArrival() + "\n\n" +
-            "-----------------------------------------------------\n" +
-            detail.getInformation())
-        );
-    }
-
-    private String checkTrainArrived(Details detail) {
-        if(detail .getSize() < 3) { // train arrived
-            return "";
-        } else {
-            return "-----------------------------------------------------\n" +
-                    "Ultima Fermata Effettuata: \n" +
-                    detail.getLastStation() + "\n\n" +
-                    "Arrivo Programmato: \n" +
-                    detail.getProgrammedLast() + "\n\n" +
-                    "Arrivo Effettivo: \n" +
-                    detail.getEffectiveLast() + "\n\n";
-        }
-    }*/
 
 }

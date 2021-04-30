@@ -2,7 +2,6 @@ package EventLoop;
 
 import io.vertx.core.Future;
 
-// External thread to handle real time monitoring of trains
 public class TrainMonitor implements Runnable {
 
     final TrainSolution library;

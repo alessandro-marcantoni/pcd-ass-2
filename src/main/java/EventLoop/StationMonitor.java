@@ -1,6 +1,11 @@
 package EventLoop;
 
-// External thread to handle real time monitoring of stations situation
+import io.vertx.core.Future;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class StationMonitor implements Runnable {
 
     final TrainSolution library;
@@ -16,7 +21,21 @@ public class StationMonitor implements Runnable {
     @Override
     public void run() {
         while(gui.isStationRunning()) {
-            gui.getStationArea().setText(gui.getStationCode());
+            Future<List<Train>> future = library.getRealTimeStationInfo(gui.getStationCode());
+            future.onSuccess(trains -> {
+                gui.getStationArea().setText(trains.stream()
+                    .map(t ->
+                        "\nNumero: " + t.getNumber() + "\n" +
+                        "Tipo: " + t.getCategory() + "\n" +
+                        "Stazione di Origine: " + t.getOrigin() + "\n" +
+                        "Stazione di Destinazione: " + t.getDestination() + "\n" +
+                        "Binario di Arrivo: " + t.getPlatformArrival() + "\n" +
+                        "Orario di Arrivo: " + getTime(t.getArrivalTime()) + "\n" +
+                        "Binario di Partenza: " + t.getPlatformDeparture() + "\n" +
+                        "Orario di Partenza: " + getTime(t.getDepartureTime()) + "\n" +
+                        "Ritardo: " + t.getDelay() + " minuti\n\n")
+                .collect(Collectors.toList()).toString());
+            });
             try {
                 Thread.sleep(FREQUENCY);
                 //gui.getStationArea().setText("");
@@ -24,5 +43,9 @@ public class StationMonitor implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    private String getTime(Date date) {
+        return (date.getHours() < 10 ? "0"+date.getHours() : date.getHours()) +":"+ (date.getMinutes() < 10 ? "0"+date.getMinutes() : date.getMinutes());
     }
 }
