@@ -17,9 +17,9 @@ public class Viewer extends Thread {
     @Override
     public void run() {
         while (!this.stopFlag.isStopped()) {
-            this.gui.modelUpdated(OccurrencesBuffer.INSTANCE.getOccurrences());
             try {
-                Thread.sleep(10);
+                this.gui.modelUpdated(OccurrencesBuffer.INSTANCE.getOccurrences());
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

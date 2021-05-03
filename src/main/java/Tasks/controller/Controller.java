@@ -13,7 +13,7 @@ import java.util.concurrent.ForkJoinPool;
 public class Controller {
 
     private final GUI gui;
-    private final ForkJoinPool forkJoinPool = new ForkJoinPool();
+    private ForkJoinPool forkJoinPool;
     private StopFlag stopFlag;
 
     public Controller(GUI gui) {
@@ -21,12 +21,16 @@ public class Controller {
     }
 
     public void notifyStarted() throws IOException {
+        this.forkJoinPool = new ForkJoinPool();
         Parameter.INSTANCE.setIgnoredWords();
         OccurrencesBuffer.INSTANCE.clear();
         this.stopFlag = new StopFlag();
         final Thread viewer = new Viewer(this.gui, this.stopFlag);
         viewer.start();
-        this.forkJoinPool.invoke(new MasterTask());
+        new Thread(() -> {
+            this.forkJoinPool.invoke(new MasterTask());
+            this.stopFlag.stop();
+        }).start();
     }
 
     public void notifyStopped() {

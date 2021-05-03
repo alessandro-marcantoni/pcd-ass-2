@@ -4,11 +4,11 @@ public class StopFlag {
 
     private boolean stopped = false;
 
-    public boolean isStopped() {
+    public synchronized boolean isStopped() {
         return this.stopped;
     }
 
-    public void stop() {
+    public synchronized void stop() {
         this.stopped = true;
     }
 
