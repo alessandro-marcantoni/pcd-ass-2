@@ -27,7 +27,7 @@ public class GUI {
 	private Controller controller;
 
 	public GUI() {
-		this.frame = new JFrame("Assignment-01");
+		this.frame = new JFrame("Assignment-02");
 
 		this.createDirectoryInput();
 		this.createExcludedInput();
