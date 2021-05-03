@@ -21,7 +21,7 @@ public class StationMonitor implements Runnable {
     @Override
     public void run() {
         while(gui.isStationRunning()) {
-            Future<List<Train>> future = library.getRealTimeStationInfo(gui.getStationCode());
+            Future<List<Train>> future = library.getRealTimeStationInfo(gui.getStationCode(), gui.getStationMode());
             future.onSuccess(trains -> {
                 gui.getStationArea().setText(trains.stream()
                     .map(t ->

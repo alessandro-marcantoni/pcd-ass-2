@@ -38,11 +38,11 @@ public class Client extends AbstractVerticle {
     }
 
 
-    public Future<List<Train>> getRealTimeStationInfo(String stationID) {
+    public Future<List<Train>> getRealTimeStationInfo(String stationID, String mode) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Promise<List<Train>> promise = Promise.promise();
         client
-                .get(80, "www.viaggiatreno.it", "/viaggiatrenonew/resteasy/viaggiatreno/arrivi/" + stationID + "/" + new Date().toString().replaceAll(" ", "%20"))
+                .get(80, "www.viaggiatreno.it", "/viaggiatrenonew/resteasy/viaggiatreno/"+ mode + "/" + stationID + "/" + new Date().toString().replaceAll(" ", "%20"))
                 .send()
                 .onSuccess(res -> {
                     if (res.statusCode() == 200) {

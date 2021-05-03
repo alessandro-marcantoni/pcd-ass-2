@@ -10,6 +10,6 @@ public interface TrainSolution {
 
     Future<Details> getRealTimeTrainInfo(String trainID);
 
-    Future<List<Train>> getRealTimeStationInfo(String stationID);
+    Future<List<Train>> getRealTimeStationInfo(String stationID, String mode);
 
 }

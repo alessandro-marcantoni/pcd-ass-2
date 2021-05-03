@@ -6,6 +6,8 @@ import io.vertx.core.Future;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,7 @@ public class GUI {
 
     private boolean train_running = false;
     private boolean station_running = false;
+    private boolean mode = false;
 
     private final TrainSolution library = new TrainSolutionLibrary();
 
@@ -62,6 +65,10 @@ public class GUI {
 
     public synchronized boolean isStationRunning() {
         return this.station_running;
+    }
+
+    public String getStationMode(){
+        return mode ? "arrivi" : "partenze";
     }
 
     private void createGUI() {
@@ -146,6 +153,13 @@ public class GUI {
         this.station_field = new JTextField();
         this.station_field.setBounds((int) (WIDTH * 0.17), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
+        final JCheckBox check = new JCheckBox("arrivi ( / partenze )");
+        check.setBounds((int) (WIDTH * 0.38), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.15), (int) (HEIGHT * 0.04));
+        check.addActionListener(e -> {
+            JCheckBox cb = (JCheckBox) e.getSource();
+            mode = cb.isSelected();
+        });
+
         this.station = new JTextArea();
         this.station.setEditable(false);
         this.station.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -189,6 +203,7 @@ public class GUI {
         this.frame.add(station_details);
         this.frame.add(station_panel);
         this.frame.add(this.station_field);
+        this.frame.add(check);
         this.frame.add(monitor_station);
         this.frame.add(stop_station);
     }
