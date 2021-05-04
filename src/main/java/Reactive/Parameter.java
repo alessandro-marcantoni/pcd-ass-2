@@ -9,9 +9,9 @@ import java.util.*;
 
 public class Parameter {
 
-	private String directory;
-    private String ignoredPath;
-    private int nWords;
+	private final String directory;
+    private final String ignoredPath;
+    private final int nWords;
     private final Set<String> ignoredWords = new HashSet<>();
 
     public Parameter(final String directory, final String path, final int nWords) {

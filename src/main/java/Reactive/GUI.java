@@ -1,11 +1,10 @@
 package Reactive;
 
-import io.reactivex.rxjava3.subjects.PublishSubject;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,13 +19,10 @@ public class GUI {
 	private JTextField directory, excluded, words, performance;
 	private JTextArea results;
 
-	private final PublishSubject<Parameter> stream;
 	private Controller controller;
 
-	public GUI(PublishSubject<Parameter> stream) {
+	public GUI() {
 		this.frame = new JFrame("Assignment-02");
-
-		this.stream = stream;
 
 		this.createDirectoryInput();
 		this.createExcludedInput();
@@ -201,8 +197,11 @@ public class GUI {
 						this.directory.getText(),
 						this.excluded.getText(),
 						Integer.parseInt(this.words.getText()));
-				this.controller.notifyStarted(parameter);
-				this.stream.onNext(parameter);
+				try {
+					this.controller.notifyStarted(parameter);
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
 			}
 		});
 		this.frame.add(start);
