@@ -1,5 +1,8 @@
 package EventLoop;
 
+import EventLoop.model.Details;
+import EventLoop.model.Solution;
+import EventLoop.model.Train;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.jsoup.Jsoup;

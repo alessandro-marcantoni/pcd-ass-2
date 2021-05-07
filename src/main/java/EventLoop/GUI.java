@@ -1,5 +1,9 @@
 package EventLoop;
 
+import EventLoop.library.TrainSolution;
+import EventLoop.library.TrainSolutionLibrary;
+import EventLoop.model.Parameters;
+import EventLoop.model.Solution;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import io.vertx.core.Future;
 

@@ -1,5 +1,10 @@
-package EventLoop;
+package EventLoop.library;
 
+import EventLoop.*;
+import EventLoop.model.Details;
+import EventLoop.model.Parameters;
+import EventLoop.model.Solution;
+import EventLoop.model.Train;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;

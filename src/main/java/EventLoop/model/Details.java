@@ -1,4 +1,4 @@
-package EventLoop;
+package EventLoop.model;
 
 public class Details {
 

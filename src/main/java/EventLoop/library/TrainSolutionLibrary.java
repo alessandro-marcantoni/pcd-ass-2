@@ -1,5 +1,10 @@
-package EventLoop;
+package EventLoop.library;
 
+import EventLoop.*;
+import EventLoop.model.Details;
+import EventLoop.model.Parameters;
+import EventLoop.model.Solution;
+import EventLoop.model.Train;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
@@ -10,8 +15,8 @@ public class TrainSolutionLibrary implements TrainSolution {
     private final Vertx vertx = Vertx.vertx();
     private final Client client;
     private final GUI gui;
-    private NewTrainMonitor trainMonitor;
-    private NewStationMonitor stationMonitor;
+    private TrainMonitor trainMonitor;
+    private StationMonitor stationMonitor;
 
     public TrainSolutionLibrary(final GUI gui) {
         this.client = new Client(vertx);
@@ -36,7 +41,7 @@ public class TrainSolutionLibrary implements TrainSolution {
 
     @Override
     public void startTrainMonitoring() {
-        this.trainMonitor = new NewTrainMonitor(this, this.gui);
+        this.trainMonitor = new TrainMonitor(this, this.gui);
         this.vertx.deployVerticle(this.trainMonitor);
     }
 
@@ -47,12 +52,13 @@ public class TrainSolutionLibrary implements TrainSolution {
 
     @Override
     public void startStationMonitoring() {
-
+        this.stationMonitor = new StationMonitor(this, this.gui);
+        this.vertx.deployVerticle(this.stationMonitor);
     }
 
     @Override
     public void stopStationMonitoring() {
-
+        this.stationMonitor.stop();
     }
 
 
