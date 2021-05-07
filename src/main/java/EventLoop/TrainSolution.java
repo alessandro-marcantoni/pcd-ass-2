@@ -12,4 +12,11 @@ public interface TrainSolution {
 
     Future<List<Train>> getRealTimeStationInfo(String stationID, String mode);
 
+    void startTrainMonitoring();
+
+    void stopTrainMonitoring();
+
+    void startStationMonitoring();
+
+    void stopStationMonitoring();
 }

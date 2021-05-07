@@ -6,8 +6,6 @@ import io.vertx.core.Future;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +22,9 @@ public class GUI {
 
     private JTextField train_field, station_field;
 
-    private boolean train_running = false;
-    private boolean station_running = false;
     private boolean mode = false;
 
-    private final TrainSolution library = new TrainSolutionLibrary();
+    private final TrainSolution library = new TrainSolutionLibrary(this);
 
     public GUI() {
         this.frame = new JFrame("Assignment-2");
@@ -51,20 +47,12 @@ public class GUI {
         return this.details;
     }
 
-    public synchronized boolean isTrainRunning() {
-        return this.train_running;
-    }
-
     public String getStationCode() {
         return this.station_field.getText();
     }
 
     public JTextArea getStationArea() {
         return this.station;
-    }
-
-    public synchronized boolean isStationRunning() {
-        return this.station_running;
     }
 
     public String getStationMode(){
@@ -136,13 +124,12 @@ public class GUI {
 
         monitor_train.addActionListener(e -> {
             if(!this.train_field.getText().isEmpty()) {
-                this.train_running = true;
-                new Thread(new TrainMonitor(this.library, this)).start();
+                this.library.startTrainMonitoring();
             }
         });
 
         stop_train.addActionListener(e -> {
-            this.train_running = false;
+            this.library.stopTrainMonitoring();
             this.details.setText("");
         });
 
@@ -174,13 +161,12 @@ public class GUI {
 
         monitor_station.addActionListener(e -> {
             if(!this.station_field.getText().isEmpty()) {
-                this.station_running = true;
-                new Thread(new StationMonitor(this.library, this)).start();
+                this.library.startStationMonitoring();
             }
         });
 
         stop_station.addActionListener(e -> {
-            this.station_running = false;
+            this.library.stopStationMonitoring();
             this.station.setText("");
         });
 
