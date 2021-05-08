@@ -24,7 +24,7 @@ public class GUI {
     private JTextArea details, station;
     private DateTimePicker picker;
 
-    private JTextField train_field, station_field;
+    private JTextField trainField, stationField;
 
     private boolean mode = false;
 
@@ -44,7 +44,7 @@ public class GUI {
     }
 
     public String getTrainCode() {
-        return this.train_field.getText();
+        return this.trainField.getText();
     }
 
     public JTextArea getTrainArea() {
@@ -52,7 +52,7 @@ public class GUI {
     }
 
     public String getStationCode() {
-        return this.station_field.getText();
+        return this.stationField.getText();
     }
 
     public JTextArea getStationArea() {
@@ -65,8 +65,8 @@ public class GUI {
 
     private void createGUI() {
         // DEPARTURE
-        final JLabel departure_label = new JLabel("Stazione Partenza:");
-        departure_label.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.1 - 20), (int) (WIDTH * 0.4), (int) (HEIGHT * 0.04));
+        final JLabel departureLabel = new JLabel("Stazione Partenza:");
+        departureLabel.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.1 - 20), (int) (WIDTH * 0.4), (int) (HEIGHT * 0.04));
 
         this.departure = new JTextField();
         this.departure.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.1), (int) (WIDTH * 0.15), (int) (HEIGHT * 0.06));
@@ -82,8 +82,8 @@ public class GUI {
         });
 
         // ARRIVAL
-        final JLabel arrival_label = new JLabel("Stazione Destinazione:");
-        arrival_label.setBounds((int) (WIDTH * 0.31), (int) (HEIGHT * 0.1 - 20), (int) (WIDTH * 0.4), (int) (HEIGHT * 0.04));
+        final JLabel arrivalLabel = new JLabel("Stazione Destinazione:");
+        arrivalLabel.setBounds((int) (WIDTH * 0.31), (int) (HEIGHT * 0.1 - 20), (int) (WIDTH * 0.4), (int) (HEIGHT * 0.04));
 
         this.arrival = new JTextField();
         this.arrival.setBounds((int) (WIDTH * 0.31), (int) (HEIGHT * 0.1), (int) (WIDTH * 0.15), (int) (HEIGHT * 0.06));
@@ -108,41 +108,41 @@ public class GUI {
         });
 
         // DETAILS BOX
-        final JLabel train_details = new JLabel("Dettagli Treno:");
-        train_details.setBounds((int) (WIDTH * 0.66), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
+        final JLabel trainDetails = new JLabel("Dettagli Treno:");
+        trainDetails.setBounds((int) (WIDTH * 0.66), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
 
-        this.train_field = new JTextField();
-        this.train_field.setBounds((int) (WIDTH * 0.76), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        this.trainField = new JTextField();
+        this.trainField.setBounds((int) (WIDTH * 0.76), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         this.details = new JTextArea();
         this.details.setEditable(false);
         this.details.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        final JScrollPane train_panel = new JScrollPane(this.details);
-        train_panel.setBounds((int) (WIDTH * 0.66), (int) (HEIGHT * 0.22), (int) (WIDTH * 0.27), (int) (HEIGHT * 0.65));
+        final JScrollPane trainPanel = new JScrollPane(this.details);
+        trainPanel.setBounds((int) (WIDTH * 0.66), (int) (HEIGHT * 0.22), (int) (WIDTH * 0.27), (int) (HEIGHT * 0.65));
 
-        final JButton monitor_train = new JButton(">");
-        monitor_train.setBounds((int) (WIDTH * 0.83), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
-        final JButton stop_train = new JButton("X");
-        stop_train.setBounds((int) (WIDTH * 0.88), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        final JButton monitorTrain = new JButton(">");
+        monitorTrain.setBounds((int) (WIDTH * 0.83), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        final JButton stopTrain = new JButton("X");
+        stopTrain.setBounds((int) (WIDTH * 0.88), (int) (HEIGHT * 0.17), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
-        monitor_train.addActionListener(e -> {
-            if(!this.train_field.getText().isEmpty()) {
+        monitorTrain.addActionListener(e -> {
+            if(!this.trainField.getText().isEmpty()) {
                 this.library.startTrainMonitoring();
             }
         });
 
-        stop_train.addActionListener(e -> {
+        stopTrain.addActionListener(e -> {
             this.library.stopTrainMonitoring();
             this.details.setText("");
         });
 
         // STATION BOX
-        final JLabel station_details = new JLabel("Dettagli Stazione:");
-        station_details.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
+        final JLabel stationDetails = new JLabel("Dettagli Stazione:");
+        stationDetails.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.3), (int) (HEIGHT * 0.04));
 
-        this.station_field = new JTextField();
-        this.station_field.setBounds((int) (WIDTH * 0.17), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        this.stationField = new JTextField();
+        this.stationField.setBounds((int) (WIDTH * 0.17), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
         final JCheckBox check = new JCheckBox("arrivi ( / partenze )");
         check.setBounds((int) (WIDTH * 0.38), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.15), (int) (HEIGHT * 0.04));
@@ -155,47 +155,47 @@ public class GUI {
         this.station.setEditable(false);
         this.station.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        final JScrollPane station_panel = new JScrollPane(this.station);
-        station_panel.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.71), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.16));
+        final JScrollPane stationPanel = new JScrollPane(this.station);
+        stationPanel.setBounds((int) (WIDTH * 0.05), (int) (HEIGHT * 0.71), (int) (WIDTH * 0.6), (int) (HEIGHT * 0.16));
 
-        final JButton monitor_station = new JButton(">");
-        monitor_station.setBounds((int) (WIDTH * 0.25), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
-        final JButton stop_station = new JButton("X");
-        stop_station.setBounds((int) (WIDTH * 0.3), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        final JButton monitorStation = new JButton(">");
+        monitorStation.setBounds((int) (WIDTH * 0.25), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
+        final JButton stopStation = new JButton("X");
+        stopStation.setBounds((int) (WIDTH * 0.3), (int) (HEIGHT * 0.66), (int) (WIDTH * 0.05), (int) (HEIGHT * 0.04));
 
-        monitor_station.addActionListener(e -> {
-            if(!this.station_field.getText().isEmpty()) {
+        monitorStation.addActionListener(e -> {
+            if(!this.stationField.getText().isEmpty()) {
                 this.library.startStationMonitoring();
             }
         });
 
-        stop_station.addActionListener(e -> {
+        stopStation.addActionListener(e -> {
             this.library.stopStationMonitoring();
             this.station.setText("");
         });
 
         this.frame.add(invert);
         this.frame.add(search);
-        this.frame.add(departure_label);
+        this.frame.add(departureLabel);
         this.frame.add(this.departure);
-        this.frame.add(arrival_label);
+        this.frame.add(arrivalLabel);
         this.frame.add(this.arrival);
         this.frame.add(date);
         this.frame.add(time);
         this.frame.add(this.picker);
 
-        this.frame.add(train_details);
-        this.frame.add(train_panel);
-        this.frame.add(this.train_field);
-        this.frame.add(monitor_train);
-        this.frame.add(stop_train);
+        this.frame.add(trainDetails);
+        this.frame.add(trainPanel);
+        this.frame.add(this.trainField);
+        this.frame.add(monitorTrain);
+        this.frame.add(stopTrain);
 
-        this.frame.add(station_details);
-        this.frame.add(station_panel);
-        this.frame.add(this.station_field);
+        this.frame.add(stationDetails);
+        this.frame.add(stationPanel);
+        this.frame.add(this.stationField);
         this.frame.add(check);
-        this.frame.add(monitor_station);
-        this.frame.add(stop_station);
+        this.frame.add(monitorStation);
+        this.frame.add(stopStation);
     }
 
     private String getTime(Date date) {
